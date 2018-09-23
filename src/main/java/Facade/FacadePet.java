@@ -53,10 +53,8 @@ public class FacadePet {
         try {
 
             em.getTransaction().begin();
-            Query q = em.createNamedQuery("Pet.findByDeath", Pet.class);
-            q.setParameter("death", null);
-            pets = q.getResultList();
-
+            TypedQuery<PetDTO> query = em.createQuery("SELECT new Entities.PetDTO(p.name, p.birth, p.species, p.ownerId.firstName, p.ownerId.lastName) FROM Pet p where p.death IS NULL", PetDTO.class);
+            pets = query.getResultList();
             em.getTransaction().commit();
             return pets;
         } finally {
